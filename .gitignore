@@ -1,3 +1,4 @@
 # 가상환경 폴더 무시
 otherevn/
 venv1/
+fastapi\venv\
