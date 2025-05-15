@@ -5,6 +5,7 @@ from passlib.context import CryptContext
 from database.connection import SessionLocal
 from models.users import User as UserModel
 from schemas.users import User, UserSignin
+from middleware.auth import get_current_user
 
 router = APIRouter(prefix="/users", tags=["users"])
 
