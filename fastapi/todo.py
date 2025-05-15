@@ -1,5 +1,4 @@
-from fastapi import APIRouter
-from fastapi import HTTPException
+from fastapi import APIRouter,HTTPException,Path
 from pydantic import BaseModel,constr
 
 class Todo(BaseModel):
@@ -14,12 +13,24 @@ todo_list = []
 #할 일 조회
 #http://localhost:8000/todos
 @todo_router.get("/{todo_id}")
-async def retrives_todo(todo_id : int):
+async def retrives_todo(todo_id : int = Path(
+        ...,
+        title="할 일 ID",
+        description="조회할 할 일의 고유 ID입니다. 1 이상 1000 이하",
+        ge=1,
+        le=1000
+    )):
     return {"todo" : todo_list}
 #할 일 상세 조회
 #http://localhost:8000/todos/{todo_id}
 @todo_router.get("/todos/{todo_id}")
-async def get_todo_id_todo(todo_id : int) -> dict:
+async def get_todo_id_todo(todo_id : int = Path(
+        ...,
+        title="할 일 ID",
+        description="상세 조회할 할 일의 고유 ID입니다. 1 이상 1000 이하",
+        ge=1,
+        le=1000
+    )) -> dict:
     for todo in todo_list:
         if todo.id == todo_id:
             return {"todo": todo}
