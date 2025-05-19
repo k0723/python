@@ -81,3 +81,37 @@ def delete_event(event_id: int, db: Session = Depends(get_db)):
     db.delete(event)
     db.commit()
     return {"message": f"{event_id}번 이벤트가 삭제되었습니다."}
+
+# 이벤트 전체삭제
+@router.delete("/")
+def delete_all_event(event_id: int, db: Session = Depends(get_db)):
+    event = db.query(EventModel).all()
+    db.delete(event)
+    db.commit()
+    return {"message": f"{event_id}번 이벤트가 삭제되었습니다."}
+
+# 이벤트 하나 삭제
+
+@router.put("/{event_id}", response_model=Event)
+def update_event(event_id: int, updated_event: Event, db: Session = Depends(get_db)):
+    event = db.query(EventModel).filter(EventModel.id == event_id).first()
+    if not event:
+        raise HTTPException(status_code=404, detail="이벤트를 찾을 수 없습니다.")
+    
+    event.title = updated_event.title
+    event.image = updated_event.image
+    event.description = updated_event.description
+    event.tags = json.dumps(updated_event.tags)
+    event.location = updated_event.location
+
+    db.commit()
+    db.refresh(event)
+
+    return Event(
+        id=event.id,
+        title=event.title,
+        image=event.image,
+        description=event.description,
+        tags=json.loads(event.tags),
+        location=event.location
+    )

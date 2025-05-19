@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html leng = "en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FLGA</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js"></script>
+    </html>
+    <body>
+        <h1>FLGA</h1>
+        <div id="content">
+            <p>FLGA is a simple web application that allows you to view and manage your FLGA data.</p>
+            <button id="fetch-data">Fetch Data</button>
+            <div id="data-display"></div>
+        </div>
+        <ul>
+
+
+        </ul>
+        <script>
+            const url = "https://restcountries.com/v3.1/all?fields=name,flags"
+        axios
+        .get(url)
+        .then(res => {
+            const filtered = res.data.filter(country =>
+                country.name.common.toLowerCase().includes("land")
+            );
+
+            filtered.map(v => {
+                const li = `
+                    <li>
+                        <img src="${v.flags.png}" style="width:50px;">
+                        <p>${v.name.common}</p>
+                    </li>
+                `;
+                $('ul').append(li);
+            });
+        })
+        .catch(err => console.log(err));
+        </script>
+    </body>
+</html>

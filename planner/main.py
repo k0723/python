@@ -1,10 +1,15 @@
 from fastapi import FastAPI
 from routes import users, events, auth
-from database.connection import Base, engine
+from database.connection import Base, engine,conn
+from contextlib import asynccontextmanager
 
 Base.metadata.create_all(bind=engine)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    conn()
+    yield
 
-app = FastAPI()
+app = FastAPI(lifespan = lifespan)
 
 app.include_router(users.router)
 app.include_router(events.router)

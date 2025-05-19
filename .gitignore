@@ -2,3 +2,8 @@
 otherevn/
 venv1/
 venv/
+planner/venv
+gitignore/
+node_modules/
+package-lock.json/
+package.json/
